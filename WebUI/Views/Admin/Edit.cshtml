@@ -1,0 +1,44 @@
+﻿@model Domain.Entities.Materials
+
+@{
+    ViewBag.Title = "Админ панель: редактирование товара";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Редактирование материала "@Model.Title"</h3>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="panel-body">
+            @Html.HiddenFor(m => m.MaterialID)
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+	        {
+                if (property.PropertyName != "MaterialID")
+                {
+                    <div class="form-group">
+                        <label>@(property.DisplayName ?? property.PropertyName)</label>
+                        @if (property.PropertyName == "Description")
+	                    {
+		                    @Html.TextArea(property.PropertyName, null, new { @class = "form-control", rows=5})
+	                    }
+                        else
+	                    {
+                            @Html.TextBox(property.PropertyName, null, new { @class = "form-control"})
+	                    }
+                        @Html.ValidationMessage(property.PropertyName)
+                    </div>
+                }
+	        }
+        </div>
+
+        <div class="panel-footer">
+            <input type="submit" value="Сохранить" class="btn btn-primary"/>
+            @Html.ActionLink("Отмена", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

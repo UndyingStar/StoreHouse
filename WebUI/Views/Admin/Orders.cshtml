@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Domain.Entities.Orders>
+
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-footer">
+        @Html.ActionLink("Список материалов", "Index", null, new { @class = "btn btn-default" })
+    </div>
+
+    <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.ClientFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th class="text-center">
+                    Действия
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td class="text-right">
+                    @item.ClientFullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="text-center">
+                    @using (Html.BeginForm("Delete", "Admin"))
+                    {
+                        @Html.Hidden("OrderID", item.OrderID)
+                        <input type="submit" class="btn btn-default btn-xs" value="Удалить" />
+                    }
+                </td>
+            </tr>
+            }
+
+        </table>
+    </div>
+
+    <div class="panel-footer">
+        @Html.ActionLink("Добавить", "Create", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("На главную", "List", null, new { @class = "btn btn-default" })
+    </div>
+</div>
