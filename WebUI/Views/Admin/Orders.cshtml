@@ -29,6 +29,9 @@
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th class="text-right">
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
                 <th class="text-center">
@@ -38,50 +41,53 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td class="text-right">
-                        @item.ClientFullName
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TotalPrice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
+            <tr>
+                <td class="text-right">
+                    @item.ClientFullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td class="text-center">
+                    @using (Html.BeginForm("Delete", "Admin"))
+                    {
+                        @Html.Hidden("OrderID", item.OrderID)
+                        <input type="submit" class="btn btn-default btn-xs" value="Удалить" />
+                    }
+                </td>
+                @if (item.Status == "Оплачен")
+                {
                     <td class="text-center">
-                        @using (Html.BeginForm("Delete", "Admin"))
+                        @using (Html.BeginForm("Engage", "Admin"))
                         {
                             @Html.Hidden("OrderID", item.OrderID)
-                            <input type="submit" class="btn btn-default btn-xs" value="Удалить" />
+                            <input type="submit" class="btn btn-default btn-xs" value="Начать отгрузку" />
                         }
                     </td>
-                    @if (item.Status == "Оплачен")
-                    {
-                        <td class="text-center">
-                            @using (Html.BeginForm("Engage", "Admin"))
-                            {
-                                @Html.Hidden("OrderID", item.OrderID)
-                                <input type="submit" class="btn btn-default btn-xs" value="Начать отгрузку" />
-                            }
-                        </td>
-                    }
-                    @if (item.Status == "Передан службе доставки")
-                    {
-                        <td class="text-center">
-                            @using (Html.BeginForm("Delievered", "Admin"))
-                            {
-                                @Html.Hidden("OrderID", item.OrderID)
-                                <input type="submit" class="btn btn-default btn-xs" value="Доставлен" />
-                            }
-                        </td>
-                    }
-                </tr>
+                }
+                @if (item.Status == "Передан службе доставки")
+                {
+                    <td class="text-center">
+                        @using (Html.BeginForm("Delievered", "Admin"))
+                        {
+                            @Html.Hidden("OrderID", item.OrderID)
+                            <input type="submit" class="btn btn-default btn-xs" value="Доставлен" />
+                        }
+                    </td>
+                }
+            </tr>
             }
 
         </table>

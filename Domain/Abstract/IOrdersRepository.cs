@@ -11,7 +11,9 @@ namespace Domain.Abstract
     {
         IEnumerable<Orders> Orders { get; }
         void CreateOrder(Cart cart, ShippingDetails shippingDetails);
+        void CreateDelievery(Cart cart, ShippingDetails shippingDetails);
         void EngageOrder(Orders order);
         void DelieveredOrder(Orders order);
+
     }
 }

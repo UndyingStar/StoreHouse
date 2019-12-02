@@ -1,12 +1,59 @@
 ﻿@model WebUI.Models.CartIndexViewModel
 
 @{
-    ViewBag.Title = "Storehouse: Ваша корзина";
+                /**/
+
+                ViewBag.Title = "Storehouse: Ваша корзина";
 }
 
 <h2>@ViewBag.Title</h2>
 
-<table id="cartTable" class="table">
+@if (!this.User.Identity.IsAuthenticated)
+{
+    <table id="cartTable" class="table">
+        <thead>
+            <tr>
+                <th>Количество</th>
+                <th>Наименование</th>
+                <th class="text-right">Цена</th>
+                <th class="text-right">Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <tr>
+                    <td class="text-center">@line.Quantity</td>
+                    <td class="text-left">@line.Material.Title - @line.Material.Title</td>
+                    <td class="text-right">@line.Material.Price.ToString("# руб")</td>
+                    <td class="text-right">@((line.Quantity * line.Material.Price).ToString("# руб"))</td>
+                    <td>
+                        @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                        {
+                            @Html.Hidden("MaterialID", line.Material.MaterialID)
+                            @Html.HiddenFor(x => x.ReturnUrl)
+                            <input class="btn btn-sm btn-warning" type="submit" value="Удалить" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right">Итого:</td>
+                <td class="text-right">
+                    @Model.Cart.ComputeTotalValue().ToString("# руб")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="text-center">
+        <a class="btn btn-primary" href="@Model.ReturnUrl">Продолжить покупки</a>
+        @Html.ActionLink("Оформить заказ", "Checkout", null, new { @class = "btn btn-primary" })
+    </div>
+}
+else { <table id="cartTable" class="table">
     <thead>
         <tr>
             <th>Количество</th>
@@ -24,11 +71,11 @@
                 <td class="text-right">@line.Material.Price.ToString("# руб")</td>
                 <td class="text-right">@((line.Quantity * line.Material.Price).ToString("# руб"))</td>
                 <td>
-                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    @using (Html.BeginForm("RemoveFromDelievery", "Cart"))
                     {
                         @Html.Hidden("MaterialID", line.Material.MaterialID)
                         @Html.HiddenFor(x => x.ReturnUrl)
-                        <input class="btn btn-sm btn-warning" type="submit" value="Удалить"/>
+                        <input class="btn btn-sm btn-warning" type="submit" value="Удалить" />
                     }
                 </td>
             </tr>
@@ -46,5 +93,6 @@
 
 <div class="text-center">
     <a class="btn btn-primary" href="@Model.ReturnUrl">Продолжить покупки</a>
-    @Html.ActionLink("Оформить заказ", "Checkout", null, new { @class = "btn btn-primary"})
-</div>
+    @Html.ActionLink("Оформить поставку", "Checkout", null, new { @class = "btn btn-primary" })
+</div>     
+}

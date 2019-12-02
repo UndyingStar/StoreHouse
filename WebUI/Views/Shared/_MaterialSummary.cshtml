@@ -18,14 +18,28 @@
                 <span class="lead">Количество на складе: @Model.Amount</span>
                 <span class="lead">@Model.Unit</span>
             </h3>
-            @using (Html.BeginForm("AddToCart", "Cart"))
+
+
+            @if (this.User.Identity.IsAuthenticated)
             {
-                <div class="pull-right">
-                    @Html.HiddenFor(x => x.MaterialID)
-                    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
-                    <input type="submit" class="btn btn-success" value="В корзину"/>
-                </div>
+                using (Html.BeginForm("AddToDelievery", "Cart"))
+                {
+                    <div class="pull-right">
+                        @Html.HiddenFor(x => x.MaterialID)
+                        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                        <input type="submit" class="btn btn-success" value="Добавить в поставку" />
+                    </div>
+                }
             }
+            else
+            { using (Html.BeginForm("AddToCart", "Cart"))
+                {
+                    <div class="pull-right">
+                        @Html.HiddenFor(x => x.MaterialID)
+                        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                        <input type="submit" class="btn btn-success" value="В корзину" />
+                    </div>
+                }}
         </div>
     </div>
     <span class="lead">@Model.Description</span>

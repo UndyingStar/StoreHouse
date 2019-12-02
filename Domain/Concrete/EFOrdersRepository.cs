@@ -26,6 +26,23 @@ namespace Domain.Concrete
             orders.ClientFullName = shippingDetails.Name;
             orders.Date = DateTime.Now;
             orders.Status = "Оплачен";
+            orders.Type = "Заказ";
+            orders.Email = shippingDetails.email;
+            context.Orders.Add(orders);
+            context.SaveChanges();
+        }
+
+        public void CreateDelievery(Cart cart, ShippingDetails shippingDetails)
+        {
+            Orders orders = new Orders();
+            foreach (var line in cart.Lines)
+            {
+                orders.TotalPrice += line.Material.Price * line.Quantity;
+            }
+            orders.ClientFullName = shippingDetails.Name;
+            orders.Date = DateTime.Now;
+            orders.Status = "Поставлен";
+            orders.Type = "Поставка";
             orders.Email = shippingDetails.email;
             context.Orders.Add(orders);
             context.SaveChanges();

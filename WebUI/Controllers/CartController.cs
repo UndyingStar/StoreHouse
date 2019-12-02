@@ -45,6 +45,19 @@ namespace WebUI.Controllers
             return RedirectToAction("Index", new { returnUrl });
         }
 
+        public RedirectToRouteResult AddToDelievery(Cart cart, int materialID, string returnUrl)
+        {
+            Materials material = materialRepository.Materials
+                .FirstOrDefault(m => m.MaterialID == materialID);
+
+            if (material != null)
+            {
+                cart.AddItemDelievery(material, 1);
+            }
+
+            return RedirectToAction("Index", new { returnUrl });
+        }
+
         public RedirectToRouteResult RemoveFromCart(Cart cart, int materialID, string returnUrl)
         {
             Materials material = materialRepository.Materials
@@ -56,6 +69,20 @@ namespace WebUI.Controllers
                 cart.RemoveLine(material);
             }
             
+            return RedirectToAction("Index", new { returnUrl });
+        }
+
+        public RedirectToRouteResult RemoveFromDelivery(Cart cart, int materialID, string returnUrl)
+        {
+            Materials material = materialRepository.Materials
+                .FirstOrDefault(m => m.MaterialID == materialID);
+
+            if (material != null)
+            {
+
+                cart.RemoveLineDelievery(material);
+            }
+
             return RedirectToAction("Index", new { returnUrl });
         }
 
@@ -77,17 +104,21 @@ namespace WebUI.Controllers
                 ModelState.AddModelError("", "Извините, корзина пуста!");
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity.IsAuthenticated)
+            {
+                orderProcessor.ProcessOrder(cart, shippingDetails);
+                orderRepository.CreateDelievery(cart, shippingDetails);
+                cart.Clear();
+                return View("Completed");
+                
+            }
+            else if (ModelState.IsValid)
             {
                 orderProcessor.ProcessOrder(cart, shippingDetails);
                 orderRepository.CreateOrder(cart, shippingDetails);
                 cart.Clear();
                 return View("Completed");
-            }
-            else
-            {
-                return View(new ShippingDetails());
-            }
-        }        
+            } else return View(new ShippingDetails());
+        }
     }
 }

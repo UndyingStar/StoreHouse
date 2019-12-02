@@ -13,7 +13,7 @@
     <h3>Данные</h3>
     <div class="form-group">
         <label>Ваше ФИО:</label>
-        @Html.TextBoxFor(x => x.Name, new { @class = "form-control"})
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
     </div>
 
     <h3>Адрес доставки</h3>
@@ -30,16 +30,24 @@
         }
     }
 
-    <h3>Опции</h3>
-    <div class="form-group">
-        <label>
-            @Html.EditorFor(x => x.GiftWrap)
-            Использовать подарочную упаковку?
-        </label>
-    </div>
-    
-    <div class="text-center">
-        <input class="btn btn-primary" type="submit" value="Обработать заказ"/>
-    </div>
+    if (!this.User.Identity.IsAuthenticated)
+    {
+        <h3>Опции</h3>
+        <div class="form-group">
+            <label>
+                @Html.EditorFor(x => x.GiftWrap)
+                Использовать подарочную упаковку?
+            </label>
+        </div>
+
+        <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Обработать и оплатить" />
+        </div>
+    }
+    else
+    {
+<div class="text-center">
+    <input class="btn btn-primary" type="submit" value="Обработать" />
+</div> }
 }
 
