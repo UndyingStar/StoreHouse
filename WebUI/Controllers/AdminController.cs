@@ -33,21 +33,26 @@ namespace WebUI.Controllers
             else return View("NotEnoughRoots");
         }
 
+        [Authorize]
         public ViewResult AddUser()
         {
-            return View();
+            if (User.Identity.Name.Contains("Admin"))
+            {
+                return View();
+            }
+            else return View("NotEnoughRoots");
         }
 
-        public ViewResult Edit(int materialID)
-        {
-            Materials material = repositoryM.Materials.FirstOrDefault(m => m.MaterialID == materialID);
-            return View(material);
-        }
-
+        [Authorize]
         public ViewResult UpdateUser(int userID)
         {
-            Users user = repositoryU.Users.FirstOrDefault(u => u.UserID == userID);
-            return View(user);
+            if (User.Identity.Name.Contains("Admin"))
+            {
+                Users user = repositoryU.Users.FirstOrDefault(u => u.UserID == userID);
+                return View(user);
+            }
+            else return View("NotEnoughRoots");
+            
         }
 
         [HttpPost]
@@ -80,33 +85,14 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
-        public ViewResult Index()
-        {
-            return View(repositoryM.Materials);
-        }
-        [Authorize]
         public ViewResult Orders()
         {
-            return View(repositoryO.Orders);
-        }
-
-       
-
-        [HttpPost]
-        public ActionResult Edit(Materials material)
-        {
-            if (ModelState.IsValid)
+            if (User.Identity.Name.Contains("Admin"))
             {
-                repositoryM.SaveMaterial(material);
-                TempData["message"] = string.Format("Изменение информации о книге \"{0}\" сохранены", material.Title);
-                return RedirectToAction("Index");
+                return View(repositoryO.Orders);
             }
-            else
-            {
-                return View(material);
-            }
+            else return View("NotEnoughRoots");
         }
-
 
         [HttpPost]
         public ActionResult Engage(Orders order)
@@ -123,6 +109,40 @@ namespace WebUI.Controllers
             return RedirectToAction("Orders");
         }
 
+
+
+
+
+        [Authorize]
+        public ViewResult Edit(int materialID)
+        {
+            Materials material = repositoryM.Materials.FirstOrDefault(m => m.MaterialID == materialID);
+            return View(material);
+        }
+
+
+        [Authorize]
+        public ViewResult Index()
+        {
+            return View(repositoryM.Materials);
+        }
+
+
+        [HttpPost]
+        public ActionResult Edit(Materials material)
+        {
+            if (ModelState.IsValid)
+            {
+                repositoryM.SaveMaterial(material);
+                TempData["message"] = string.Format("Изменение информации о книге \"{0}\" сохранены", material.Title);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(material);
+            }
+        }
+
         [HttpPost]
         public ActionResult Delete(Materials material)
         {
@@ -130,6 +150,7 @@ namespace WebUI.Controllers
                 return RedirectToAction("Index");
         }
 
+        [Authorize]
         public ViewResult Create()
         {
             return View();
