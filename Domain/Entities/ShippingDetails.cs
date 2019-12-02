@@ -14,7 +14,7 @@ namespace Domain.Entities
 
         [Required(ErrorMessage = "Адрес доставки")]
         [Display(Name="Первый адрес")]
-        public string Line1 { get; set; }
+        public string Location { get; set; }
 
         [Required(ErrorMessage = "Укажите город")]
         [Display(Name = "Город")]
@@ -23,6 +23,14 @@ namespace Domain.Entities
         [Required(ErrorMessage = "Укажите страну")]
         [Display(Name = "Страна")]
         public string Country { get; set; }
+
+        [Required(ErrorMessage = "Укажите счет для оплаты")]
+        [Display(Name = "Счет для оплаты")]
+        public string paymentBill { get; set; }
+
+        [Required(ErrorMessage = "Укажите почту для обратной связи")]
+        [Display(Name = "Почта")]
+        public string email { get; set; }
 
         public bool GiftWrap { get; set; }
     }

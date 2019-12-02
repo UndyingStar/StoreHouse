@@ -12,5 +12,8 @@ namespace Domain.Concrete
     {
         public DbSet<Materials> Materials { get; set; }
         public DbSet<Orders> Orders { get; set; }
+
+
+        public DbSet<Users> Users { get; set; }
     }
 }

@@ -25,9 +25,31 @@ namespace Domain.Concrete
             }
             orders.ClientFullName = shippingDetails.Name;
             orders.Date = DateTime.Now;
-            orders.Status = "Ожидает оплаты";
+            orders.Status = "Оплачен";
+            orders.Email = shippingDetails.email;
             context.Orders.Add(orders);
             context.SaveChanges();
         }
+
+        public void EngageOrder(Orders order)
+        {
+            Orders dbEntry = context.Orders.Find(order.OrderID);
+            if (dbEntry != null)
+            {
+                dbEntry.Status = "Передан службе доставки";
+            }
+            context.SaveChanges();
+        }
+
+        public void DelieveredOrder(Orders order)
+        {
+            Orders dbEntry = context.Orders.Find(order.OrderID);
+            if (dbEntry != null)
+            {
+                dbEntry.Status = "Доставлен";
+            }
+            context.SaveChanges();
+        }
+
     }
 }

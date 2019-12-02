@@ -88,7 +88,6 @@ namespace WebUI.Controllers
             {
                 return View(new ShippingDetails());
             }
-        }
-        
+        }        
     }
 }

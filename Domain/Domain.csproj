@@ -80,14 +80,17 @@
     <Compile Include="Abstract\IMaterialRepository.cs" />
     <Compile Include="Abstract\IOrdersRepository.cs" />
     <Compile Include="Abstract\IOrderProcessor.cs" />
+    <Compile Include="Abstract\IUsersRepository.cs" />
     <Compile Include="Concrete\EFMaterialsRepository.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFOrdersRepository.cs" />
+    <Compile Include="Concrete\EFUsersRepository.cs" />
     <Compile Include="Concrete\EmailOrderProcessor.cs" />
     <Compile Include="Entities\Materials.cs" />
     <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\Orders.cs" />
     <Compile Include="Entities\ShippingDetails.cs" />
+    <Compile Include="Entities\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

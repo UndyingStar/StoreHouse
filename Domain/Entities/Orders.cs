@@ -29,5 +29,8 @@ namespace Domain.Entities
         [Display(Name = "Статус")]
         public string Status { get; set; }
 
+        [Display(Name = "Электронная почта")]
+        public string Email { get; set; }
+
     }
 }

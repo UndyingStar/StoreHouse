@@ -24,7 +24,7 @@ namespace WebUI.Controllers
             MaterialsListViewModel model = new MaterialsListViewModel()
             {
                 Materials = repository.Materials
-                .Where(b => type == null || b.Type == type)
+                .Where(m => type == null || m.Type == type)
                 .OrderBy(material => material.MaterialID)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize),

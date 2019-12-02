@@ -26,6 +26,7 @@ namespace WebUI.Infrastructure
         {
             kernel.Bind<IMaterialRepository>().To<EFMaterialsRepository>();
             kernel.Bind<IOrdersRepository>().To<EFOrdersRepository>();
+            kernel.Bind<IUsersRepository>().To<EFUsersRepository>();
 
             EmailSettings emailSettings = new EmailSettings
             {

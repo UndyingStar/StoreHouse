@@ -43,7 +43,7 @@ namespace Domain.Concrete
                 if (emailSettings.WriteAsFile)
                 {
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                    smtpClient.PickupDirectoryLocation = emailSettings.FileLocation;
+                    smtpClient.PickupDirectoryLocation = @"c:\storehouse_emails";
                     smtpClient.EnableSsl = false;
                 }
 
@@ -61,11 +61,12 @@ namespace Domain.Concrete
                 body.AppendFormat("Общая стоимость: {0:c}", cart.ComputeTotalValue())
                     .AppendLine("---")
                     .AppendLine("Доставка:")
-                    .AppendLine(shippingDetails.Name)
-                    .AppendLine(shippingDetails.Line1)
-                    .AppendLine(shippingDetails.City)
-                    .AppendLine(shippingDetails.Country)
+                    .AppendLine(shippingDetails.Name + "\n")
+                    .AppendLine(shippingDetails.Location + "\n")
+                    .AppendLine(shippingDetails.City + "\n")
+                    .AppendLine(shippingDetails.Country + "\n")
                     .AppendLine("---")
+                    .AppendLine("Оплачено со счета: \n" + shippingDetails.paymentBill)
                     .AppendFormat("Подарочная упаковка: {0}", shippingDetails.GiftWrap ? "Да" : "Нет");
 
                 MailMessage mailMessage = new MailMessage(
@@ -83,5 +84,45 @@ namespace Domain.Concrete
                 smtpClient.Send(mailMessage);
             }
         }
+
+        public void ProcessResponse(Entities.Orders order)
+        {
+            using (var smtpClient = new SmtpClient())
+            {
+                smtpClient.EnableSsl = emailSettings.UseSsl;
+                smtpClient.Host = emailSettings.ServerName;
+                smtpClient.Port = emailSettings.ServerPort;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = new NetworkCredential(emailSettings.Username, emailSettings.Password);
+
+                if (emailSettings.WriteAsFile)
+                {
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    smtpClient.PickupDirectoryLocation = @"c:\engageOrders_emails";
+                    smtpClient.EnableSsl = false;
+                }
+
+                StringBuilder body = new StringBuilder()
+                .AppendLine("Ваш заказ был передан службе доставки")
+                .AppendLine("---");
+
+               string MailToAddress = order.Email;
+
+                MailMessage mailMessage = new MailMessage(
+                    emailSettings.MailFromAddress,
+                    emailSettings.MailToAddress,
+                    "Ваш заказ передан службе доставки!",
+                    body.ToString()
+                    );
+
+                if (emailSettings.WriteAsFile)
+                {
+                    mailMessage.BodyEncoding = Encoding.UTF8;
+                }
+
+                smtpClient.Send(mailMessage);
+            }
+        }
     }
-}
+    }
+
